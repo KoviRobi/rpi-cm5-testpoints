@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang=en>
+    <head>
+        <meta charset="utf-8">
+        <script src="https://d3js.org/d3.v4.js"></script>
+    </head>
+
+    <body>
+
+        <!-- Create a div where the graph will take place -->
+        <div id="div_template"></div>
+
+        <script>
+            var w = 55;
+            var h = 40;
+            var border = 5;
+            var svg =
+                d3.select("#div_template")
+                .append("svg")
+                    .attr("viewBox", [0, 0, w + border, h + border])
+                .append("g")
+                    .attr("transform", `translate(${border/2}, ${border/2})`);
+
+            svg.append("defs")
+                .append("pattern")
+                .attr('patternUnits', 'userSpaceOnUse')
+                .attr('width', w)
+                .attr('height', h)
+                .attr("id", "bg")
+                    .append("image")
+                    .attr("xlink:href", "background.jpg")
+                    .attr("width", w)
+                    .attr("height", h);
+
+            const g = svg.append("g");
+
+            //Read the data
+            d3.csv("testpoints.csv", function(data) {
+
+                g.append("rect")
+                    .attr("width", w)
+                    .attr("height", h)
+                    .attr("rx", 3)
+                    .attr("ry", 3)
+                    .attr("stroke", "black")
+                    .attr("stroke-width", 0.2)
+                    .attr("fill", "url(#bg)");
+
+                // Add dots
+                const dots = g.selectAll("dot")
+                        .data(data)
+                        .enter()
+                        .append("g")
+                            .attr("transform", function (d) {
+                                return `translate(${w-d.X}, ${h-d.Y}) rotate(-20)`;
+                            });
+
+                dots.append("circle")
+                    .attr("r", function (d) {
+                        return d.Name == "Mounting Hole" ? "2.6px" : "1.1px";
+                    })
+                    .style("fill", function (d) {
+                        return d.Name == "Mounting Hole" ? "#cc88" : "#eee8";
+                    })
+
+                dots.append("text")
+                        .attr("textLength", "2em")
+                        .attr("lengthAdjust", "spacingAndGlyphs")
+                        .attr("text-anchor", "middle")
+                        .attr("dominant-baseline", "text-bottom")
+                        .attr("style", "font-size: 0.8px;")
+                        .text(function (d) { return d.Reference; })
+
+                dots.append("text")
+                        .attr("textLength", "2em")
+                        .attr("lengthAdjust", "spacingAndGlyphs")
+                        .attr("text-anchor", "middle")
+                        .attr("dominant-baseline", "text-top")
+                        .attr("style", "font-size: 0.8px;")
+                        .text(function (d) { return d.Name; });
+
+                dots.append("title").text(function (d) { return `${d.Reference}\n${d.Name}`; })
+
+            })
+        </script>
+    </body>
+</html>
