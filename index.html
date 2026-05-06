@@ -67,7 +67,7 @@
                         .attr("textLength", "2em")
                         .attr("lengthAdjust", "spacingAndGlyphs")
                         .attr("text-anchor", "middle")
-                        .attr("dominant-baseline", "text-bottom")
+                        .attr("dy", "0.7px")
                         .attr("style", "font-size: 0.8px;")
                         .text(function (d) { return d.Reference; })
 
@@ -75,7 +75,7 @@
                         .attr("textLength", "2em")
                         .attr("lengthAdjust", "spacingAndGlyphs")
                         .attr("text-anchor", "middle")
-                        .attr("dominant-baseline", "text-top")
+                        .attr("dy", "-0.1px")
                         .attr("style", "font-size: 0.8px;")
                         .text(function (d) { return d.Name; });
 
